@@ -38,7 +38,8 @@ import cv2
 # 				image = np.frombuffer(image, dtype = np.uint8).reshape(480, 640, 3)
 # 				names = face_reg.detect(image)
 # 				print(names)
+
 face_reg = RAFaceRecognition("./database")
-image = cv2.imread("cream.jpeg")
+image = cv2.imread("cena.jpeg")
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-status = face_reg.register("cream", )
+status = face_reg.register("John Cena", image)
