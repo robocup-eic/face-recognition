@@ -36,9 +36,14 @@ class RAFaceRecognition:
         """
         if(name in self.names_db): return {"message": "name taken", "isOk": False}
         try:
+            print("Face locations in register")
+            print(face_recognition.face_locations(img))
             encoding = face_recognition.face_encodings(img)[0]
             with open(os.path.join(self.db_path, name+".pickle"), "wb") as f:
                 pickle.dump(encoding, f)
+            print(len(self.face_encodings_db))
+            self.face_encodings_db, self.names_db = load_encodings(self.db_path)
+            print(len(self.face_encodings_db))
             return {"message": "Ok", "isOk": True}
         except:
             return {"message": "something wrong with the image", "isOk": False}
@@ -50,14 +55,14 @@ class RAFaceRecognition:
         :param img: 2D array Image
         :return: return a dictionary of { name: (top, right, bottom, left) }
         """
+        print(self.db_path)
+        self.face_encodings_db, self.names_db = load_encodings(self.db_path)
+        print(f"Loaded {self.names_db}")
         faces = {}
         if len(self.face_encodings_db) == 0: return faces
 
-        small_img = cv2.resize(img, (0, 0), fx=0.25, fy=0.25)
-        rgb_small_frame = small_img[:, :, ::-1]
-
-        face_locations = face_recognition.face_locations(rgb_small_frame)
-        encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+        face_locations = face_recognition.face_locations(img)
+        encodings = face_recognition.face_encodings(img, face_locations)
 
         for index, encoding in enumerate(encodings):
             matches = face_recognition.compare_faces(self.face_encodings_db, encoding)

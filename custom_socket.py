@@ -1,5 +1,4 @@
 import socket
-from socket import SOL_SOCKET, SO_REUSEADDR
 import struct
 import numpy as np
 import json
@@ -10,7 +9,6 @@ class CustomSocket :
 		self.host = host
 		self.port = port
 		self.sock = socket.socket()
-		self.sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 		self.isServer = False
 
 	def startServer(self) :
@@ -27,6 +25,7 @@ class CustomSocket :
 	def clientConnect(self) :
 		try :
 			self.sock.connect((self.host,self.port))
+			print("[SOCKET CLIENT CONNECTED TO "+str(self.host)+" "+str(self.port)+"]")
 		except Exception as e :
 			print("Error :",e)
 			return False
@@ -38,7 +37,7 @@ class CustomSocket :
 			temp = msg.encode('utf-8')
 		except Exception as e :
 			# This message is an image
-			print("This is an image")
+			print("[IMAGE SENT THROUGH SOCKET]")
 		msg = struct.pack('>I', len(msg)) + temp
 		sock.sendall(msg)
 
@@ -74,10 +73,11 @@ def main() :
 	while True :
 		conn, addr = server.sock.accept()
 		print("Client connected from",addr)
-		data = server.recvMsg(conn)
-		img = np.frombuffer(data,dtype=np.uint8).reshape(720,1080,3)
-		print(img)
-		server.sendMsg(conn,["mock1"])
+		while True :
+			data = server.recvMsg(conn)
+			# img = np.frombuffer(data,dtype=np.uint8).reshape(720,1080,3)
+			res = {"mean" : 0 , "mode" : 0 , "med" : 0}
+			print(res)
 
 if __name__ == '__main__' :
 	main()	
