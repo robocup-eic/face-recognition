@@ -63,6 +63,12 @@ class CustomSocket :
 
 		return self.recvall(sock, msgLen)
 
+	def req(self,image) :
+		self.sendMsg(self.sock,image.tobytes())
+		result = self.recvMsg(self.sock)
+		result = result.decode('utf-8')
+		return json.loads(result)
+
 	def register(self, image, name):
 		command = b'register'+self.SPLITTER
 		image = image[:,:,::-1].tobytes()
