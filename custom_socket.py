@@ -8,11 +8,15 @@ class CustomSocket :
 	def __init__(self,host,port) :
 		self.host = host
 		self.port = port
+		self.SPLITTER = b"CHAMPANDCAPTAIN"
 		self.sock = socket.socket()
 		self.isServer = False
 
 	def startServer(self) :
 		try :
+			# solve address already in use error
+			# https://python-list.python.narkive.com/Y15bAxfI/socket-unbind-or-socket-unlisten-socket-error-48-address-already-in-use
+			self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 			self.sock.bind((self.host,self.port))
 			self.sock.listen(5)
 			self.isServer = True
@@ -59,11 +63,17 @@ class CustomSocket :
 
 		return self.recvall(sock, msgLen)
 
-	def req(self,image) :
-		self.sendMsg(self.sock,image.tobytes())
-		result = self.recvMsg(self.sock)
-		result = result.decode('utf-8')
-		return json.loads(result)
+	def register(self, image, name):
+		command = b'register'+self.SPLITTER
+		image = image[:,:,::-1].tobytes()
+		name = self.SPLITTER + bytes(name, 'utf-8')
+		self.sendMsg(self.sock, command + image + name)
+		
+	def detect(self, image):
+		command = b'detect'+self.SPLITTER
+		image = image[:,:,::-1].tobytes()
+		self.sendMsg(self.sock, command + image )
+		
 
 def main() :
 

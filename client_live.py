@@ -22,7 +22,29 @@ c.clientConnect()
 # print(image_with_command)
 # data = image_with_command.split("CHAMP"))
 
-while True : 
+cap = cv2.VideoCapture(2)
+cap.set(4,720)
+cap.set(3,1280)
+
+while cap.isOpened():
+	
+    ret, frame = cap.read()
+    if not ret:
+        print("Ignoring empty camera frame.")
+        continue
+    
+    cv2.imshow('test', frame)
+    print(frame.shape)
+
     print("Send")
     # c.register(image,test_name)
-    c.detect(image)
+
+    c.detect(frame)
+
+
+    if cv2.waitKey(1) == ord("q"):
+        cap.release()
+
+cv2.destroyAllWindows()
+
+
