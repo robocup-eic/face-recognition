@@ -13,7 +13,7 @@ port = 10006
 c = CustomSocket(host,port)
 c.clientConnect()
 
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(-1)
 cap.set(4,720)
 cap.set(3,1280)
 
@@ -27,8 +27,9 @@ while cap.isOpened():
     cv2.imshow('test', frame)
 
     print("Send")
-    # c.register(image,test_name)
-    c.detect(frame)
+    x = c.detect(frame)
+    print(x)
+    # c.detect(frame)
 
     if cv2.waitKey(1) == ord("q"):
         cap.release()

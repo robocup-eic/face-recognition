@@ -10,7 +10,7 @@ def getName():
 
 if __name__ == "__main__" :
     raFaceRecognition = RAFaceRecognition("database")
-    vid = cv2.VideoCapture(2)
+    vid = cv2.VideoCapture(-1)
 
     while(True):
         rect, frame = vid.read()

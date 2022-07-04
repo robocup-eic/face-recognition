@@ -72,7 +72,7 @@ class RAFaceRecognition:
                 name = self.names_db[best_match_index]
                 (top, right, bottom, left) = face_locations[index]
                 if name not in faces:
-                    faces[name] = (top*4, right*4, bottom*4, left*4)
+                    faces[name] = (left, top, right-left, bottom-top)
 
         return faces
 

@@ -19,10 +19,12 @@ port = 10006
 c = CustomSocket(host,port)
 c.clientConnect()
 
-# print(image_with_command)
-# data = image_with_command.split("CHAMP"))
+x = c.register(image, "elonma")
+print(x)
+# # print(image_with_command)
+# # data = image_with_command.split("CHAMP"))
 
-while True : 
-    print("Send")
-    # c.register(image,test_name)
-    c.detect(image)
+# while True : 
+#     print("Send")
+#     # c.register(image,test_name)
+#     c.detect(image)
